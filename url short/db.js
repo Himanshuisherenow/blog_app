@@ -9,5 +9,18 @@ const urlSchema = new mangoose.Schema({
     redirectURL:{
         type : String,
         unique : true
-    }
+    },
+    visitHistory:[
+        {
+            timestamp:{
+                type:Number
+            }
+        }
+    ],
+            
+},
+{
+    timestamp:true
 })
+
+const URL =  mongoose.model('url',urlSchema)
