@@ -1,25 +1,25 @@
-const express = require('express');
-const app = express();
-const articalRouter = require('./routes/articles');
+const express = require('express')
+const mongoose = require('mongoose')
+const Article = require('./models/article')
+const articleRouter = require('./routes/articles')
+const methodOverride = require('method-override')
+const app = express()
 
-app.set("view engine","ejs");
+try{mongoose.connect('mongodb://localhost/blog', {
+  useNewUrlParser: true, useUnifiedTopology: true
+})
+}catch(e){
+    console.log('something went wrong')
+}
+app.set('view engine', 'ejs')
+app.use(express.urlencoded({ extended: false }))
+app.use(methodOverride('_method'))
 
-app.use('/articles',articalRouter)
-
-app.get('/virat',(req,res)=>{
-
-    const articles = [{
-        title : "science",
-        createdAt : new Date().toLocaleDateString(),
-        description : "science and technologi i s getting more and more highlighted and getting more devlopeds"
-    },{
-        title : "maths",
-        createdAt : new Date().toLocaleDateString(),
-        description : "maths and physics i s getting more and more highlighted and getting more devlopeds"
-    }]
-    res.render('articles/index',{articles:articles}  )
+app.get('/', async (req, res) => {
+  const articles = await Article.find().sort({ createdAt: 'desc' })
+  res.render('articles/index', { articles: articles })
 })
 
-app.listen(3001,()=>{
-    console.log("server started running...");
-})
+app.use('/articles', articleRouter)
+
+app.listen(5000)
