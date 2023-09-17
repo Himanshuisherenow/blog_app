@@ -1,6 +1,6 @@
-const mongoose = require('mangoose');
+const mongoose = require('mongoose');
 
-const urlSchema = new mangoose.Schema({
+const urlSchema = new mongoose.Schema({
     shortId:{
         type : String,
         required :true,

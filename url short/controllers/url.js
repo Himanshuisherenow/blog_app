@@ -1,9 +1,22 @@
-const {nanoid}= require('nanoid')
+const shortid= require('shortid');
+const URL = require('../models/url');
 
 
-async function handleGeneratedNewShortUrl(req,res){
+async function handleGeneratedNewShortURL(req,res){
 
+    const body  = req.body ;
+    if(!body.url) return res.status(400).json({error : "url is reqired "})
 
+    const shortID = shortid(8);
+ await URL.create({
+        shortId : shortID,
+        redirectURL:body.url,
+        visitHistory:[],
+    })
+    
+return res.json({id : shortID})
 
 
 }
+
+module.exports = {handleGeneratedNewShortURL}
